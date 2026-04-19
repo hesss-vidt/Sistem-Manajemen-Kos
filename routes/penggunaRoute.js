@@ -1,6 +1,7 @@
 import express from "express";
+import { getAllPengguna, getPenggunaById, createPengguna, updatePengguna, deletePengguna } from "../controllers/penggunaController.js";
+
 const router = express.Router();
-import { getAllPengguna, getPenggunaById, createPengguna, updatePengguna, deletePengguna } from "../controllers/penggunaControllers.js";
 
 router.get("/", getAllPengguna);
 router.get("/:id", getPenggunaById);

@@ -2,8 +2,12 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import penggunaRoutes from "./routes/penggunaRoutes.js";
-import kamarRoutes from "./routes/kamarRoutes.js";
+import penggunaRoute from "./routes/penggunaRoute.js";
+import kamarRoute from "./routes/kamarRoute.js";
+import penyewaRoute from "./routes/penyewaRoute.js";
+import kontrakRoute from "./routes/kontrakRoute.js";
+import pembayaranRoute from "./routes/pembayaranRoute.js";
+import keluhanRoute from './routes/keluhanRoute.js';
 
 dotenv.config();
 
@@ -13,8 +17,12 @@ app.use(cors());
 app.use(express.json()); 
 
 // 2. Mounting Routes (Pasangkan dengan awalan URL)
-app.use("/pengguna", penggunaRoutes);
-app.use("/kamar", kamarRoutes);
+app.use("/pengguna", penggunaRoute);
+app.use("/kamar", kamarRoute);
+app.use("/penyewa", penyewaRoute);
+app.use("/kontrak", kontrakRoute);
+app.use("/pembayaran", pembayaranRoute);
+app.use('/keluhan', keluhanRoute);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
