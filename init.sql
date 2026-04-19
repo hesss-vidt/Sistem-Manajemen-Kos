@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS kos_db;
+CREATE DATABASE kos_db;
 USE kos_db;
 
 -- 1. Resource: Pengguna
@@ -14,7 +14,7 @@ CREATE TABLE pengguna (
 CREATE TABLE kamar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nomor_kamar VARCHAR(10) UNIQUE NOT NULL,
-    tipe_kamar ENUM('standar', 'eksklusif') DEFAULT 'standard',
+    tipe_kamar ENUM('standar', 'eksklusif') DEFAULT 'standar',
     fasilitas TEXT NOT NULL,
     harga_per_bulan DECIMAL(10,2) NOT NULL,
     status_kamar ENUM('tersedia', 'dihuni') DEFAULT 'tersedia'

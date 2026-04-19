@@ -1,13 +1,6 @@
 import express from "express";
-import { 
-    getAllKamar, 
-    getKamarById, 
-    createKamar, 
-    updateKamar, 
-    deleteKamar 
-} from "../controllers/kamarControllers.js";
-
 const router = express.Router();
+import { getAllKamar, getKamarById, createKamar, updateKamar, deleteKamar } from "../controllers/kamarControllers.js";
 
 router.get("/", getAllKamar);
 router.get("/:id", getKamarById);
