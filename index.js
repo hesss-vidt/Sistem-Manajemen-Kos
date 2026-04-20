@@ -17,7 +17,7 @@ const app = express();
 app.use(cors());
 app.use(express.json()); 
 
-// 2. Mounting Routes (Pasangkan dengan awalan URL)
+// Routes
 app.use("/", homeRoute);
 app.use("/pengguna", penggunaRoute);
 app.use("/kamar", kamarRoute);
@@ -28,6 +28,14 @@ app.use('/keluhan', keluhanRoute);
 
 app.get('/', (req, res) => {
     res.send("Selamat Datang di API Manajemen Kos!");
+});
+
+// Handle Error Global  
+app.use((req, res, next) => {
+    res.status(404).json({
+        status: "error",
+        message: "Endpoint atau URL tidak ditemukan. Silakan cek kembali penulisan URL Anda."
+    });
 });
 
 const PORT = process.env.PORT || 8000;

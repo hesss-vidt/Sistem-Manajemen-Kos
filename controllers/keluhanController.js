@@ -1,6 +1,6 @@
 import db from "../config/database.js";
 
-// 1. GET Semua Keluhan (Triple JOIN: Keluhan -> Kontrak -> Penyewa & Kamar)
+// 1. GET Semua Keluhan 
 const getAllKeluhan = (req, res) => {
     const status = req.query.status_penanganan || '';
     
@@ -30,6 +30,9 @@ const getAllKeluhan = (req, res) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }
+        if (results.length === 0) {
+            return res.status(404).json({ status: "fail", message: "Data tidak ditemukan. Kriteria pencarian Anda mungkin tidak sesuai" });
+        }
         res.status(200).json({ status: "success", page: page, limit: limit, data: results });
     });
 };
@@ -57,10 +60,10 @@ const getKeluhanById = (req, res) => {
 
 // 3. POST Tambah Keluhan Baru
 const createKeluhan = (req, res) => {
-    const { id_kontrak, judul_keluhan, deskripsi_keluhan } = req.body;
-    const query = "INSERT INTO keluhan (id_kontrak, judul_keluhan, deskripsi_keluhan, status_keluhan) VALUES (?, ?, ?, 'pending')";
+    const { id_penyewa, id_kamar, judul_laporan, deskripsi } = req.body;
+    const query = "INSERT INTO keluhan (id_penyewa, id_kamar, judul_laporan, deskripsi) VALUES (?, ?, ?, ?)";
     
-    db.query(query, [id_kontrak, judul_keluhan, deskripsi_keluhan], (err, result) => {
+    db.query(query, [id_penyewa, id_kamar, judul_laporan, deskripsi], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }
@@ -71,7 +74,7 @@ const createKeluhan = (req, res) => {
 // 4. PUT Update Status/Tanggapan Keluhan
 const updateKeluhan = (req, res) => {
     const { status_penanganan} = req.body;
-    const query = "UPDATE keluhan SET status_keluhan = ?,  WHERE id = ?";
+    const query = "UPDATE keluhan SET status_penanganan = ? WHERE id = ?";
     
     db.query(query, [status_penanganan, req.params.id], (err, result) => {
         if (err) {

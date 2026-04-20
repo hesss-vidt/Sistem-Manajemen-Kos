@@ -31,6 +31,9 @@ const getAllKontrak = (req, res) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }
+        if (results.length === 0) {
+            return res.status(404).json({ status: "fail", message: "Data tidak ditemukan. Kriteria pencarian Anda mungkin tidak sesuai" });
+        }
         res.status(200).json({ status: "success", page: page, limit: limit, data: results });
     });
 };
