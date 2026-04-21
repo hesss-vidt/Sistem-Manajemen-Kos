@@ -42,10 +42,14 @@ const createPengguna = (req, res) => {
 
 // PUT Update Pengguna
 const updatePengguna = (req, res) => {
-    const { username, password, role } = req.body;
-    const query = "UPDATE pengguna SET username = ?, password = ?, role = ? WHERE id = ?";
+    const { username, password } = req.body;
+    const query = "UPDATE pengguna SET username = ?, password = ? WHERE id = ?";
 
-    db.query(query, [username, password, role, req.params.id], (err, result) => {
+    if (!username || !password) {
+        return res.status(400).json({ status: "fail", message: "Username dan Password wajib diisi." });
+    }
+
+    db.query(query, [username, password, req.params.id], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }

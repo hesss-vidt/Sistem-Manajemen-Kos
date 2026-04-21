@@ -2,8 +2,8 @@ import db from "../config/database.js";
 
 // GET Semua Kamar 
 const getAllKamar = (req, res) => {
-    const nomor = req.query.nomor || ''; 
-    const tipe = req.query.tipe || '';
+    const nomor_kamar = req.query.nomor_kamar || ''; 
+    const tipe_kamar = req.query.tipe_kamar || '';
     const status_kamar = req.query.status_kamar || '';
 
     const page = parseInt(req.query.page) || 1;
@@ -17,9 +17,9 @@ const getAllKamar = (req, res) => {
         query += " AND status_kamar = ?";
         queryParams.push(status_kamar);
     }
-    if (tipe) {
+    if (tipe_kamar) {
         query += " AND tipe_kamar = ?";
-        queryParams.push(tipe);
+        queryParams.push(tipe_kamar);
     }
     
     query += " LIMIT ? OFFSET ?";
@@ -53,12 +53,15 @@ const getKamarById = (req, res) => {
 
 // POST Tambah Kamar Baru
 const createKamar = (req, res) => {
-    const { nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan, status_kamar } = req.body;
-    const query = "INSERT INTO kamar (nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan, status_kamar) VALUES (?, ?, ?, ?, ?)";
+    const { nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan } = req.body;
+    const query = "INSERT INTO kamar (nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan) VALUES (?, ?, ?, ?)";
     
-    db.query(query, [nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan, status_kamar || 'tersedia'], (err, result) => {
+    if (!nomor_kamar || !tipe_kamar || !fasilitas || !harga_per_bulan ) {
+        return res.status(400).json({status: "fail", message: "Data yang dimasukkan tidak lengkap!"})
+    }
+    db.query(query, [nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan || 'tersedia'], (err, result) => {
         if (err) {
-            return res.status(500).json({ status: "error", message: err.message });
+            return res.status(500).json({ status: "error", message: err.message }); 
         }
         res.status(201).json({ status: "success", message: "Kamar berhasil ditambahkan", id: result.insertId });
     });
@@ -66,10 +69,14 @@ const createKamar = (req, res) => {
 
 // PUT Update Data Kamar
 const updateKamar = (req, res) => {
-    const { nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan, status_kamar } = req.body;
-    const query = "UPDATE kamar SET nomor_kamar = ?, tipe_kamar = ?, fasilitas = ?, harga_per_bulan = ?, status_kamar = ? WHERE id = ?";
+    const { status_kamar } = req.body;
+    const query = "UPDATE kamar SET status_kamar = ? WHERE id = ?";
+
+    if (!status_kamar) {
+        return res.status(400).json({ status: "fail", message: " Status Kamar wajib diisi." });
+    }
     
-    db.query(query, [nomor_kamar, tipe_kamar, fasilitas, harga_per_bulan, status_kamar, req.params.id], (err, result) => {
+    db.query(query, [ status_kamar, req.params.id], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }

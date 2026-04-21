@@ -2,7 +2,7 @@ import db from "../config/database.js";
 
 // 1. GET Semua Keluhan 
 const getAllKeluhan = (req, res) => {
-    const status = req.query.status_penanganan || '';
+    const status_penanganan = req.query.status_penanganan || '';
     
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -18,9 +18,9 @@ const getAllKeluhan = (req, res) => {
     
     let queryParams = [];
 
-    if (status) {
+    if (status_penanganan) {
         query += " AND keluhan.status_penanganan = ?";
-        queryParams.push(status);
+        queryParams.push(status_penanganan);
     }
 
     query += " LIMIT ? OFFSET ?";
@@ -63,6 +63,10 @@ const createKeluhan = (req, res) => {
     const { id_penyewa, id_kamar, judul_laporan, deskripsi } = req.body;
     const query = "INSERT INTO keluhan (id_penyewa, id_kamar, judul_laporan, deskripsi) VALUES (?, ?, ?, ?)";
     
+    if (!id_penyewa || !id_kamar || !judul_laporan || !deskripsi) { 
+        return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
+    }
+
     db.query(query, [id_penyewa, id_kamar, judul_laporan, deskripsi], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
@@ -76,6 +80,10 @@ const updateKeluhan = (req, res) => {
     const { status_penanganan} = req.body;
     const query = "UPDATE keluhan SET status_penanganan = ? WHERE id = ?";
     
+    if (!status_penanganan) {
+        return res.status(400).json({ status: "fail", message: "Status Penanganan wajib diisi." });
+    }
+
     db.query(query, [status_penanganan, req.params.id], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });

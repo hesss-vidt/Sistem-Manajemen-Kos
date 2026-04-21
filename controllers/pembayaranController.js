@@ -2,8 +2,8 @@ import db from "../config/database.js";
 
 // 1. GET Semua Pembayaran 
 const getAllPembayaran = (req, res) => {
-    const status = req.query.status_pembayaran || '';
-    const metode = req.query.metode_pembayaran || '';
+    const status_pembayaran = req.query.status_pembayaran || '';
+    const metode_pembayaran = req.query.metode_pembayaran || '';
     
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -20,14 +20,14 @@ const getAllPembayaran = (req, res) => {
     
     let queryParams = [];
 
-    if (status) {
+    if (status_pembayaran) {
         query += " AND pembayaran.status_pembayaran = ?";
-        queryParams.push(status);
+        queryParams.push(status_pembayaran);
     }
 
-    if (metode) {
+    if (metode_pembayaran) {
         query += " AND pembayaran.metode_pembayaran = ?";
-        queryParams.push(metode);
+        queryParams.push(metode_pembayaran);
     }
 
     query += " LIMIT ? OFFSET ?";
@@ -68,10 +68,14 @@ const getPembayaranById = (req, res) => {
 
 // 3. POST Tambah Pembayaran Baru
 const createPembayaran = (req, res) => {
-    const { id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran, status_pembayaran } = req.body;
-    const query = "INSERT INTO pembayaran (id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran, status_pembayaran) VALUES (?, ?, ?, ?, ?)";
+    const { id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran } = req.body;
+    const query = "INSERT INTO pembayaran (id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran) VALUES (?, ?, ?, ?)";
+
+    if (!id_kontrak || !tanggal_bayar || !jumlah_bayar || !metode_pembayaran) {
+        return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
+    }
     
-    db.query(query, [id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran, status_pembayaran || 'pending'], (err, result) => {
+    db.query(query, [id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran ], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }
@@ -81,10 +85,14 @@ const createPembayaran = (req, res) => {
 
 // 4. PUT Update Status/Data Pembayaran
 const updatePembayaran = (req, res) => {
-    const { jumlah_pembayaran, metode_pembayaran, status_pembayaran } = req.body;
-    const query = "UPDATE pembayaran SET jumlah_pembayaran = ?, metode_pembayaran = ?, status_pembayaran = ? WHERE id = ?";
+    const { status_pembayaran } = req.body;
+    const query = "UPDATE pembayaran SET status_pembayaran = ? WHERE id = ?";
+
+    if (!status_pembayaran) {
+        return res.status(400).json({ status: "fail", message: "Status Pembayaran wajib diisi." });
+    }
     
-    db.query(query, [status_pembayaran, metode_pembayaran, jumlah_pembayaran, req.params.id], (err, result) => {
+    db.query(query, [status_pembayaran, req.params.id], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }

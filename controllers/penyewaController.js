@@ -2,8 +2,8 @@ import db from "../config/database.js";
 
 const getAllPenyewa = (req, res) => {
 
-    const nama = req.query.nama || '';
-    const gender = req.query.jenis_kelamin || '';
+    const nama_lengkap = req.query.nama_lengkap || '';
+    const jenis_kelamin = req.query.jenis_kelamin || '';
     const pekerjaan = req.query.pekerjaan || '';
     
     const page = parseInt(req.query.page) || 1;
@@ -16,11 +16,11 @@ const getAllPenyewa = (req, res) => {
         JOIN pengguna ON penyewa.id_pengguna = pengguna.id 
         WHERE penyewa.nama_lengkap LIKE ?
     `;
-    let queryParams = [`%${nama}%`];
+    let queryParams = [`%${nama_lengkap}%`];
 
-    if (gender) {
+    if (jenis_kelamin) {
         query += " AND jenis_kelamin = ?";
-        queryParams.push(gender);
+        queryParams.push(jenis_kelamin);
     }
 
     if (pekerjaan) {
@@ -64,9 +64,13 @@ const getPenyewaById = (req, res) => {
 
 // POST Tambah Penyewa Baru 
 const createPenyewa = (req, res) => {
-    const { id_pengguna, nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp } = req.body;
-    const query = "INSERT INTO penyewa (id_pengguna, nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp) VALUES (?, ?, ?, ?, ?, ?)";
+    const { id_pengguna, nama_lengkap, pekerjaan, asal_kota, no_hp } = req.body;
+    const query = "INSERT INTO penyewa (id_pengguna, nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp) VALUES (?, ?, ?, ?, ?)";
     
+    if (!id_pengguna || !nama_lengkap | !jenis_kelamin || !pekerjaan || !asal_kota || !no_hp) {
+        return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
+    }
+
     db.query(query, [id_pengguna, nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
@@ -77,10 +81,14 @@ const createPenyewa = (req, res) => {
 
 // PUT Update Data Penyewa
 const updatePenyewa = (req, res) => {
-    const { nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp } = req.body;
-    const query = "UPDATE penyewa SET nama_lengkap = ?, jenis_kelamin = ?, pekerjaan = ?, asal_kota = ?, no_hp = ? WHERE id = ?";
+    const { nama_lengkap, pekerjaan } = req.body;
+    const query = "UPDATE penyewa SET nama_lengkap = ?, pekerjaan = ? WHERE id = ?";
+
+    if (!nama_lengkap || !pekerjaan) {
+        return res.status(400).json({ status: "fail", message: "Nama lengkap dan Pekerjaan wajib diisi." });
+    }
     
-    db.query(query, [nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp, req.params.id], (err, result) => {
+    db.query(query, [nama_lengkap, pekerjaan, req.params.id], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }

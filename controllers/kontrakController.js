@@ -2,9 +2,9 @@ import db from "../config/database.js";
 
 // 1. GET Semua Kontrak 
 const getAllKontrak = (req, res) => {
-    const nomor = req.query.nomor_kamar || '';
-    const nama = req.query.nama_penyewa || '';
-    const status = req.query.status_sewa || '';
+    const nomor_kamar = req.query.nomor_kamar || '';
+    const nama_penyewa = req.query.nama_penyewa || '';
+    const status_sewa = req.query.status_sewa || '';
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
@@ -17,11 +17,11 @@ const getAllKontrak = (req, res) => {
         JOIN penyewa ON kontrak.id_penyewa = penyewa.id 
         WHERE kamar.nomor_kamar LIKE ? AND penyewa.nama_lengkap LIKE ?
     `;
-    let queryParams = [`%${nomor}%`, `%${nama}%`];
+    let queryParams = [`%${nomor_kamar}%`, `%${nama_penyewa}%`];
 
-    if (status) {
+    if (status_sewa) {
         query += " AND kontrak.status_sewa = ?";
-        queryParams.push(status);
+        queryParams.push(status_sewa);
     }
 
     query += " ORDER BY kontrak.tanggal_masuk DESC LIMIT ? OFFSET ?";
@@ -60,10 +60,14 @@ const getKontrakById = (req, res) => {
 
 // 3. POST Tambah Kontrak Baru
 const createKontrak = (req, res) => {
-    const { id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa, status_sewa } = req.body;
-    const query = "INSERT INTO kontrak (id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa, status_sewa) VALUES (?, ?, ?, ?, ?, ?)";
+    const { id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa } = req.body;
+    const query = "INSERT INTO kontrak (id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa) VALUES (?, ?, ?, ?, ?)";
+
+    if (!id_penyewa || !id_kamar || !tanggal_masuk || !tanggal_berakhir || !periode_sewa) {
+        return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
+    }
     
-    db.query(query, [id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa, status_sewa || 'aktif'], (err, result) => {
+    db.query(query, [id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }
@@ -73,10 +77,14 @@ const createKontrak = (req, res) => {
 
 // 4. PUT Update Data Kontrak
 const updateKontrak = (req, res) => {
-    const { id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa, status_sewa } = req.body;
-    const query = "UPDATE kontrak SET id_kamar = ?, id_penyewa = ?, tanggal_masuk = ?, tanggal_berakhir = ?, periode_sewa = ?, status_sewa = ? WHERE id = ?";
+    const { status_sewa } = req.body;
+    const query = "UPDATE kontrak SET status_sewa = ? WHERE id = ?";
+
+    if (!status_sewa) {
+        return res.status(400).json({ status: "fail", message: "Status Sewa wajib diisi." });
+    }
     
-    db.query(query, [id_kamar, id_penyewa, tanggal_masuk, tanggal_berakhir, periode_sewa, status_sewa, req.params.id], (err, result) => {
+    db.query(query, [ status_sewa, req.params.id], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });
         }
