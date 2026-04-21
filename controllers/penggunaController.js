@@ -32,6 +32,10 @@ const createPengguna = (req, res) => {
     const { username, password, role } = req.body;
     const query = "INSERT INTO pengguna (username, password, role) VALUES (?, ?, ?)";
 
+    if (!username || !password || !role) {
+        return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
+    }
+
     db.query(query, [username, password, role || 'penyewa'], (err, result) => {
         if (err) {
             return res.status(500).json({ status: "error", message: err.message });

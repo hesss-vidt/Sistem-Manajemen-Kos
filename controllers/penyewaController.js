@@ -67,7 +67,7 @@ const createPenyewa = (req, res) => {
     const { id_pengguna, nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp } = req.body;
     const query = "INSERT INTO penyewa (id_pengguna, nama_lengkap, jenis_kelamin, pekerjaan, asal_kota, no_hp) VALUES (?, ?, ?, ?, ?, ?)";
     
-    if (!id_pengguna || !nama_lengkap | !jenis_kelamin || !pekerjaan || !asal_kota || !no_hp) {
+    if (!id_pengguna || !nama_lengkap || !jenis_kelamin || !pekerjaan || !asal_kota || !no_hp) {
         return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
     }
 
