@@ -39,9 +39,10 @@ Jika tidak ada error, Anda akan melihat pesan konfirmasi di terminal bahwa serve
 ## Dokumentasi API Endpoint
 Berikut adalah daftar resource utama yang tersedia pada API ini:<br>
 **1. Pengguna**
-| Resource   | Method | Endpoint            | Deskripsi                          |
-|------------|--------|---------------------|------------------------------------|
-| User       | GET    | /users              | Mengambil semua data user          |
-| Kamar      | POST   | /kamar              | Menambahkan kamar baru             |
-| Pemesanan  | PUT    | /pemesanan/{id}     | Update data pemesanan berdasarkan ID |
-| Pembayaran | DELETE | /pembayaran/{id}    | Hapus data pembayaran berdasarkan ID |
+| Method | Endpoint      | Deskripsi                                    |
+|--------|---------------|----------------------------------------------|
+| GET    | /pengguna     | Mendapatkan semua data pengguna              |
+| GET    | /pengguna/:id | Mendapatkan 1 detail pengguna berdasarkan ID |
+| POST   | /pengguna     | Menambahkan pengguna baru                    |
+| PUT    | /pengguna/:id | Mengubah data dari pengguna                  |
+| DELETE | /pengguna/:id | Menghapus data pengguna                      |
