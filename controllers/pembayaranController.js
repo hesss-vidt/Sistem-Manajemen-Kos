@@ -71,7 +71,7 @@ const createPembayaran = (req, res) => {
     const { id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran } = req.body;
     const query = "INSERT INTO pembayaran (id_kontrak, tanggal_pembayaran, jumlah_pembayaran, metode_pembayaran) VALUES (?, ?, ?, ?)";
 
-    if (!id_kontrak || !tanggal_bayar || !jumlah_bayar || !metode_pembayaran) {
+    if (!id_kontrak || !tanggal_pembayaran || !jumlah_pembayaran || !metode_pembayaran) {
         return res.status(400).json({ status: "fail", message: "Data yang dimasukkan tidak lengkap!" });
     }
     
