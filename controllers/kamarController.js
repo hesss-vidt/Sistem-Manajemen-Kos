@@ -11,7 +11,7 @@ const getAllKamar = (req, res) => {
     const offset = (page - 1) * limit;
     
     let query = "SELECT * FROM kamar WHERE nomor_kamar LIKE ?";
-    let queryParams = [`%${nomor}%`];
+    let queryParams = [`%${nomor_kamar}%`];
 
     if (status_kamar) {
         query += " AND status_kamar = ?";
