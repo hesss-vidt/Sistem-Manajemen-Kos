@@ -1,8 +1,15 @@
 # API Sistem Manajemen Kos
 #### API backend untuk mengelola operasional rumah kos secara digital. Sistem ini dirancang untuk menangani pencatatan kamar, penyewa, kontrak sewa, pelacakan pembayaran, hingga pengelolaan keluhan. 
+
+---
+Pembagian Tugas :
+- M. Altaf Yusnawan Chan (241110745) : Membuat CRUD pada Resource Pengguna, Membuat Laporan Dokumentasi
+- Evan Aditya Panjaitan (241111558) : Membuat CRUD pada Resource Kamar, Membuat Laporan Dokumentasi
+- Maradu Winner Laurensius (241112149) : Membuat CRUD pada Resource Penyewa dan Kontrak
+- Maheswaren (241112528) : Membuat CRUD pada Resource Pembayaran dan Keluhan 
 ---
 
-## ⚙️ Persiapan & Instalasi
+## Persiapan & Instalasi
 Pastikan komputer Anda sudah terinstal **Node.js**, **MySQL** (bisa menggunakan aplikasi seperti XAMPP atau Laragon), dan aplikasi pengujian API seperti **Postman**.
 
 **1. Clone repositori ini**<br>Buka terminal/command prompt Anda, lalu jalankan perintah berikut untuk mengunduh kode sumber dan masuk ke dalam folder direktori proyek:
