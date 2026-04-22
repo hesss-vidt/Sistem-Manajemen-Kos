@@ -39,10 +39,55 @@ Jika tidak ada error, Anda akan melihat pesan konfirmasi di terminal bahwa serve
 ## Dokumentasi API Endpoint
 Berikut adalah daftar resource utama yang tersedia pada API ini:<br>
 **1. Pengguna**
-| Method | Endpoint      | Deskripsi                                    |
-|--------|---------------|----------------------------------------------|
-| GET    | /pengguna     | Mendapatkan semua data pengguna              |
-| GET    | /pengguna/:id | Mendapatkan 1 detail pengguna berdasarkan ID |
-| POST   | /pengguna     | Menambahkan pengguna baru                    |
-| PUT    | /pengguna/:id | Mengubah data dari pengguna                  |
-| DELETE | /pengguna/:id | Menghapus data pengguna                      |
+| Method | Endpoint        | Deskripsi                                  | Digunakan Oleh |
+|--------|-----------------|--------------------------------------------|----------------|
+| GET    | `/pengguna`     | Mendapatkan semua data pengguna            | Admin          |
+| GET    | `/pengguna/:id` | Mendapatkan detail satu informasi pengguna | Admin          |
+| POST   | `/pengguna`     | Menambahkan pengguna atau admin baru       | Pengguna       |
+| PUT    | `/pengguna/:id` | Mengubah data dari pengguna                | Pengguna       |
+| DELETE | `/pengguna/:id` | Menghapus data pengguna                    | Admin          |
+
+**2. Kamar**
+| Method | Endpoint     | Deskripsi                                 | Digunakan Oleh    |
+|--------|--------------|-------------------------------------------|-------------------|
+| GET    | `/kamar`     | Mendapatkan semua data kamar              | Admin / Pengguna  |
+| GET    | `/kamar/:id` | Mendapatkan detail satu informasi kamar   | Admin / Pengguna  |
+| POST   | `/kamar`     | Menambahkan data kamar kos baru           | Admin             |
+| PUT    | `/kamar/:id` | Mengubah status ketersediaan kamar        | Admin             |
+| DELETE | `/kamar/:id` | Menghapus data kamar                      | Admin             |
+
+**3. Penyewa**
+| Method | Endpoint       | Deskripsi                                   | Digunakan Oleh   |
+|--------|----------------|---------------------------------------------|------------------|
+| GET    | `/penyewa`     | Mendapatkan semua data profil penyewa       | Admin            |
+| GET    | `/penyewa/:id` | Mendapatkan detail satu penyewa             | Admin / Pengguna |
+| POST   | `/penyewa`     | Menambahkan biodata penyewa baru            | Admin            |
+| PUT    | `/penyewa/:id` | Mengubah profil penyewa (Nama & Pekerjaan)  | Admin / Pengguna |
+| DELETE | `/penyewa/:id` | Menghapus data penyewa                      | Admin            |
+
+**4. Kontrak**
+| Method | Endpoint       | Deskripsi                                   | Digunakan Oleh   |
+|--------|----------------|---------------------------------------------|------------------|
+| GET    | `/kontrak`     | Mendapatkan semua data kontrak kos          | Admin            |
+| GET    | `/kontrak/:id` | Mendapatkan detail satu kontrak             | Admin / Pengguna |
+| POST   | `/kontrak`     | Membuat dokumen kontrak sewa baru           | Admin            |
+| PUT    | `/kontrak/:id` | Mengubah status kontrak (aktif / selesai)   | Admin            |
+| DELETE | `/kontrak/:id` | Menghapus data kontrak                      | Admin            |
+
+**5. Pembayaran**
+| Method | Endpoint          | Deskripsi                                     | Digunakan Oleh   |
+|--------|-------------------|-----------------------------------------------|------------------|
+| GET    | `/pembayaran`     | Mendapatkan semua riwayat transaksi           | Admin            |
+| GET    | `/pembayaran/:id` | Mendapatkan detail satu transaksi pembayaran  | Admin / Pengguna |
+| POST   | `/pembayaran`     | Membuat laporan pembayaran baru               | Admin / Pengguna |
+| PUT    | `/pembayaran/:id` | Mengubah status pembayaran (pending ke lunas) | Admin            |
+| DELETE | `/pembayaran/:id` | Menghapus riwayat transaksi                   | Admin            |
+
+**6. Keluhan**
+| Method | Endpoint       | Deskripsi                                          | Digunakan Oleh   |
+|--------|----------------|----------------------------------------------------|------------------|
+| GET    | `/keluhan`     | Mendapatkan daftar semua keluhan                   | Admin            |
+| GET    | `/keluhan/:id` | Mendapatkan detail status penanganan satu keluhan  | Admin / Pengguna |
+| POST   | `/keluhan`     | Membuat laporan keluhan                            | Pengguna         |
+| PUT    | `/keluhan/:id` | Mengubah status penanganan (diproses / selesai)    | Admin            |
+| DELETE | `/keluhan/:id` | Menghapus laporan keluhan                          | Admin            |
